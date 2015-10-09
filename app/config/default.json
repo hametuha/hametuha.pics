@@ -1,0 +1,7 @@
+{
+  "host": "http://local.hametuha.top",
+  "domain": "http://hametuha.info",
+  "id": "10",
+  "key": "some-app-key",
+  "secret": "here-comes-secret"
+}

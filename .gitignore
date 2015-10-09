@@ -1,0 +1,9 @@
+!.gitkeep
+app/node_modules
+app/npm-debug.log
+app/public/out/*
+app/public/fonts/*
+app/config/*
+!app/config/default.json
+cookbooks/
+.vagrant/
