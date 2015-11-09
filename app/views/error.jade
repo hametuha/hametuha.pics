@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  .container
+    div(class='card text-center tc-white-1 bgc-red-500 p+++ m+++')=message
+    if error
+      pre=error

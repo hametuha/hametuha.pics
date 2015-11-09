@@ -1,0 +1,22 @@
+{
+  "name": "hamTop",
+  "main": "app.js",
+  "version": "0.0.0",
+  "authors": [
+    "fumikito <guy@hametuha.com>"
+  ],
+  "description": "A cover generator for Hametuha.",
+  "license": "MIT",
+  "homepage": "http://hametuha.top",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "lumx": "~0.3.94",
+    "neat": "~1.7.2"
+  }
+}

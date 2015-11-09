@@ -1,0 +1,37 @@
+# PPH FPM
+upstream node{
+	server 127.0.0.1:3000;
+}
+
+# Proxy Cache setting
+proxy_temp_path <%= node[:log_dir] %>/tmp;
+proxy_cache_path <%= node[:cache_dir] %> levels=1:2 keys_zone=czone:8m max_size=50m inactive=120m;
+proxy_redirect off;
+proxy_set_header  Host               $host;
+proxy_set_header  X-Forwarded-Host   $host;
+proxy_set_header  X-Forwarded-Server $host;
+proxy_set_header  X-Forwarded-For    $proxy_add_x_forwarded_for;
+
+
+# Main server
+# this server caches almost everything
+server{
+	listen <%= node[:ip] %>:80;
+	server_name <%= node[:host_name] %>;
+	root <%= node[:doc_dir] %>;
+    # Log cache status
+    add_header X-Cache "$upstream_cache_status";
+    # include statics
+    include "static.conf";
+    # Process Proxy Cache
+    location / {
+         set $do_not_cache 1;
+         # Proxy Cache setting
+         proxy_cache_valid 200 30m;
+         proxy_no_cache $do_not_cache;
+         proxy_cache_bypass $do_not_cache;
+         proxy_cache czone;
+         proxy_cache_key "$scheme://$host$request_filename"; # Ignores query string
+         proxy_pass http://node;
+    }
+}

@@ -1,0 +1,70 @@
+extends layout
+
+block content
+  #main.container(ng-cloak)
+    section.covers__wrap(ng-controller='CoverList')
+      .user-info.clearfix.p
+        p.float-right
+          button.btn.btn--m.btn--blue.btn--raised(lx-ripple, ng-click='openDialog("addCover")')
+            i.mdi.mdi-plus
+            | カバーを追加
+        p.p
+          img.user-info__pic.mr.float-left(src="#{user.avatar_urls['96']}")
+          span.user-info__name こんにちは、#{user.name}さん！
+
+      lx-dialog.dialog.dialog--l(id='addCover', auto-close='true')
+        .dialog__header.p
+          h3.modal-title 追加するカバー情報
+        .dialog__content.p
+          form(ng-submit="addForm('addCover')")
+            input(type='hidden', name='user', ng-model="data.user", ng-init="data.user = #{user.id}" )
+            div(flex-container='row', flex-gutter='24')
+              div(flex-item)
+                lx-text-field(label='タイトル')
+                  input(type='text', name=title, ng-model="data.title")
+              div(flex-item)
+                lx-text-field(label='サブタイトル, ジャンル')
+                  input(type='text', name=subTitle, ng-model='data.subTitle')
+            div(flex-container='row')
+              div(flex-item)
+                lx-text-field(label="作者名", icon="account")
+                  input(type='text', name=author, ng-model='data.author')
+            .radio-group
+              .radio-button
+                input.radio-button__input#type-1(type='radio', name=type, value='bunko', ng-model='data.type')
+                label.radio-button__label(for='type-1') 文庫風
+              .radio-button
+                input.radio-button__input#type-2(type='radio', name=type, value='shinsho', ng-model='data.type')
+                label.radio-button__label(for='type-2') 新書風
+        .dialog__actions.ph
+          button.btn.btn--m.btn--black.btn--flat(type='button', lx-ripple, lx-dialog-close) キャンセル
+          button.btn.btn--m.btn--green.btn--raised(type='button', lx-ripple, ng-click="addForm('addCover')") 追加
+      ul.list(ng-init='initCovers()')
+        li.list-row.list-row--has-separator(ng-repeat='cover in covers')
+          .list-row__primary
+            i.mdi.mdi-book
+          .list-row__content
+            strong
+              |{{cover.title}}
+              small.ml {{cover.subTitle}}
+            small.fs-body-1
+              span.mr {{cover.author}}
+              code {{cover.type}}
+          .list-row__secondary
+            lx-dropdown(position="right",from-top="true")
+              button.btn.btn--m.btn--black.btn--flat(lx-ripple, lx-dropdown-toggle)
+                i.mdi.mdi-settings
+              lx-dropdown-menu
+                ul
+                  li
+                    a.dropdown-link(href='/covers/preview/{{cover._id}}/')
+                      i.mr.mdi.mdi-eye
+                      | プレビュー
+                  li
+                    a.dropdown-link(ng-click='getScreenShot($index)')
+                      i.mr.mdi.mdi-camera
+                      | 取得
+                  li
+                    a.dropdown-link(ng-click="confirm($index)")
+                      i.mr.mdi.mdi-close
+                      | 削除

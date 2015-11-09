@@ -1,8 +1,15 @@
-# HamTop
+# はめぴくっ！
+
+破滅派が運営しているWebサイト[はめぴくっ！](http://hametuha.pics)のソースコードです。
+現在のメンテナ（[fumikito](https://github.com/fumikito)）が死亡したら困るので、公開しています。
+
+## ライセンス
+
+本リポジトリのすべてのソースコードには[MITライセンス](https://opensource.org/licenses/MIT)が適用されます。
 
 ## インストール
 
-このツールでは以下の技術を利用します。
+このツールでは以下の技術を利用しています。
 
 - VirtualBox [VirtualBox Mania VirtualBoxのインストール・設定・使い方を詳しく解説](http://vboxmania.net)
 - Vagrant [ダウンロード](https://www.vagrantup.com)
@@ -17,14 +24,14 @@
 
 このリポジトリをクローンしたら、次の操作を行います。ほとんどの操作はこのリポジトリのルートディレクトリで行います。
 
-このドキュメントでは、ルートディレクトリを ~/Documents/hametuha.top とし、それを「ホームディレクトリ」と呼びます。
+このドキュメントでは、ルートディレクトリを ~/Documents/hametuha.pics とし、それを「ホームディレクトリ」と呼びます。
 
 #### Vagrant boxの追加
 
 ホームディレクトリで以下のVagrantコマンドを発行してください。
 
 ```
-vagrant box add opscode-centos-6.5 http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-6.5_chef-provisionerless.box
+vagrant box add opscode-centos-7.0 http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-7.0_chef-provisionerless.box
 ```
 
 #### Vagrant プラグインの追加
@@ -42,18 +49,24 @@ vagrant plugin install vagrant-berkshelf
 
 #### セットアップ
 
-```
+```bash
 # アップ
 vagrant up
 # アクセス
 vagrant ssh
 # ドキュメントルートへ
 cd /var/www/app
+# npmをインストール
+npm install
+# bowerをインストール
+bower install
+# gulpでビルド
+gulp build
 # アプリを開始
 npm start
 ```
 
-http://local.hametuha.top へアクセス
+http://local.hametuha.pics へアクセスすると、ローカルサイトが始まっていません。
 
 ## 変更があった場合
 

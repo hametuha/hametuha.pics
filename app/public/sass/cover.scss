@@ -1,0 +1,193 @@
+@import "settings/colors";
+
+.cover{
+  background: #db987a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 400px; //1200 / 3
+  height: 640px; // 1920 / 3
+  .expand &{
+    width: 1200px;
+    height: 1920px;
+  }
+
+  margin: 0 auto;
+
+  // 共通の要素
+  &--bunko{
+    $title-font: "DNPShueiMinPr6-M";
+    $sub-font: "CezannePro-M";
+    text-align: center;
+    position: relative;
+    $bg-color: #F6F0D9;
+    $body-color: #000000;
+    color: $body-color;
+    background: $bg-color url('../images/paper.jpg') left top repeat;
+    .cover{
+      &__wrap{
+        top: 50px;
+        position: relative;
+        padding: 80px 60px 0;
+        .expand &{
+          top: 150px;
+          padding: 240px 180px 0;
+        }
+
+      }
+      &__frame{
+        position: absolute;
+        left: 4%;
+        max-width: 92%;
+        width: auto;
+        height: auto;
+        &--top{
+          top: 3%;
+        }
+        &--bottom{
+          bottom: 3%;
+        }
+      }
+      &__title,
+      &__sub-title,
+      &__author{
+        font-family: $title-font, serif;
+      }
+      &__title{
+        font-size: 22px;
+        font-weight: normal;
+        .expand &{
+          font-size: 66px;
+        }
+      }
+      &__sub-title{
+        font-size: 16px;
+        .expand &{
+          font-size: 48px;
+        }
+      }
+      &__author{
+        margin: 1em 0 0;
+        padding-top: 1em;
+        border-top: 3px double darken($body-color, 20);
+        font-size: 14px;
+        .expand &{
+          font-size: 42px;
+          border-top-width: 9px;
+        }
+      }
+      &__credit{
+        margin-top: 280px;
+        .expand & {
+          margin-top: 840px;
+        }
+      }
+      &__company{
+        font-family: $sub-font, sans-serif;
+        font-size: 12px;
+        .expand &{
+          font-size: 36px;
+        }
+        &--logo{
+          fill: $body-color;
+          margin: 0.5em auto;
+          width: 40px;
+          height: 40px;
+          .expand &{
+            width: 120px;
+            height: 120px;
+          }
+        }
+      }
+    }
+  }
+
+
+  &--shinsho{
+    background: #fff;
+    position: relative;
+    $title-font: "DNPShueiGoGinStd-B";
+    $subtitle-font: "DNPShueiGoGinStd-L";
+    overflow: hidden;
+    .line{
+      position: absolute;
+      height: 100%;
+      width: 2em;
+      border-right: 1px solid #ddd;
+      top: 10%;
+      right: 30%;
+      transform: rotate(60deg);
+      .expand &{
+        border-right-width: 3px;
+      }
+    }
+    .circle{
+      background: $yellow-500;
+      width: 100px;
+      height: 100px;
+      margin-left: -50px;
+      .expand &{
+        width: 300px;
+        height: 300px;
+        margin-left: -150px;
+      }
+      position: absolute;
+      //border-radius: 50%;
+      top: 60%;
+      left: 50%;
+    }
+    .cover{
+      &__title{
+        font-family: $subtitle-font, sans-serif;
+        font-size: 36px;
+        padding: 2em 0.5em 0.25em;
+        border-bottom: 1px solid #ddd;
+        margin: 0;
+        .expand &{
+          font-size: 108px;
+          border-bottom-width: 3px;
+        }
+      }
+      &__sub-title{
+        color: #444;
+        margin: 0;
+        font-size: 24px;
+        font-family: $subtitle-font, sans-serif;
+        padding: 0.25em 0.75em;
+        .expand &{
+          font-size: 72px;
+        }
+      }
+      &__author{
+        font-size: 14px;
+        padding: 4em 1.5em;
+        font-family: "CezannePro-DB", sans-serif;
+        .expand &{
+          font-size: 42px;
+        }
+      }
+      &__credit{
+        position: absolute;
+        bottom: 20px;
+        right: 5%;
+        width: 90%;
+        text-align: right;
+        font-size: 14px;
+        color: #888;
+        .expand &{
+          bottom: 60px;
+          font-size: 42px;
+        }
+      }
+      &__company{
+        font-family: "CezanneProN-M", sans-serif;
+      }
+    }
+  }
+
+}
+.back{
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}

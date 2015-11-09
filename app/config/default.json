@@ -1,7 +1,8 @@
 {
-  "host": "http://local.hametuha.top",
-  "domain": "http://hametuha.info",
+  "host": "http://hametuha.top",
+  "domain": "https://hametuha.com",
   "id": "10",
-  "key": "some-app-key",
-  "secret": "here-comes-secret"
+  "consumerKey": "some-app-key",
+  "consumerSecret": "here-comes-secret",
+  "gravatar": "foo@example.com"
 }
