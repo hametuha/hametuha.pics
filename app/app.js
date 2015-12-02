@@ -32,10 +32,13 @@ app.use(express.static(path.join(__dirname, 'public'), {
 // Body parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+
 // Cookie parser
 app.use(cookieParser());
+
 // Set DB
 mongoose.connect('mongodb://localhost/hametop');
+
 // Error handling for mongoDB
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 mongoose.connection.once('open', function() {
@@ -71,18 +74,21 @@ credentials = {
 credentials.requestTokenURL = credentials.wpRoot + '/oauth1/request';
 credentials.accessTokenURL = credentials.wpRoot + '/oauth1/access';
 credentials.userAuthorizationURL = credentials.wpRoot + '/oauth1/authorize';
+
 // Set session
 app.use(passport.initialize());
 app.use(passport.session());
+
 // User serializer
 passport.serializeUser(function (user, done) {
     done(null, user);
 });
+
 // User deserializer
 passport.deserializeUser(function (obj, done) {
     done(null, obj);
 });
-console.log(credentials);
+
 // Redirect to WordPress
 passport.use('wp', new OAuthStrategy({
         requestTokenURL     : credentials.requestTokenURL,
@@ -93,14 +99,15 @@ passport.use('wp', new OAuthStrategy({
         callbackURL         : configs.get('host') + '/auth/callback'
     },
     function (token, tokenSecret, profile, done) {
-        passport.session.token = token;
-        passport.session.tokenSecret = tokenSecret;
-        oauthRequest.get('/users/me', function(err, data, response){
+        oauthRequest.get('/wp/v2/users/me', token, tokenSecret, function(err, data, response){
             if( err ){
-                console.log(err);
+                console.log('ユーザー情報取得失敗', err);
                 return done(null, false);
             }else{
-                return done(null, JSON.parse(data));
+                data = JSON.parse(data);
+                data.token = token;
+                data.tokenSecret = tokenSecret;
+                return done(null, data);
             }
         });
     }
@@ -136,11 +143,15 @@ app.get('/tutorial/', function(req, res, next){
 
 // 認証
 app.get('/auth', passport.authenticate('wp'));
+
+// 認証コールバック
 app.get('/auth/callback', passport.authenticate('wp', {
     successRedirect: '/covers/',
     failureRedirect: '/auth/failure/',
     failureFlash   : true
 }));
+
+// ログイン失敗
 app.get('/auth/failure', function (req, res, next) {
     res.render('index', {
         title  : 'ログイン失敗',
@@ -148,6 +159,8 @@ app.get('/auth/failure', function (req, res, next) {
         avatar: gravatar.url(configs.get('gravatar'), {s: '400', r: 'x', d: 'retro'}, true)
     });
 });
+
+// ログアウト
 app.get('/auth/logout', function(req, res, next){
     req.session.destroy();
     res.render('index', {
@@ -158,7 +171,7 @@ app.get('/auth/logout', function(req, res, next){
     });
 });
 
-// URL Enter
+// Cover list
 app.use('/covers', covers);
 
 // catch 404 and forward to error handler
@@ -196,42 +209,3 @@ app.use(function (err, req, res, next) {
 
 
 module.exports = app;
-
-// var server = app.listen(3000, '127.0.0.1', function () {
-
-//   var host = server.address().address
-//   var port = server.address().port
-
-//   console.log('Example app listening at http://%s:%s', host, port)
-
-// })
-
-// var express = require('express');
-// var path = require('path');
-// var favicon = require('serve-favicon');
-// var logger = require('morgan');
-// var cookieParser = require('cookie-parser');
-// var bodyParser = require('body-parser');
-
-// var routes = require('./routes/index');
-// var users = require('./routes/users');
-
-// var app = express();
-
-// // view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'jade');
-
-// // uncomment after placing your favicon in /public
-// //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-// app.use(logger('dev'));
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, 'public')));
-
-// app.use('/', routes);
-// app.use('/users', users);
-
-
-// module.exports = app;

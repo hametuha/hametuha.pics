@@ -1,10 +1,8 @@
 var express   = require('express'),
     router    = express.Router(),
     Cover     = require('../models/cover'),
-    fs        = require('fs'),
     authCheck = require('../lib/auth-check'),
-    path      = require('path'),
-    Pageres   = require('pageres'),
+    coverFile = require('../lib/coverFile'),
     configs   = require('config');
 
 // GET list page
@@ -59,52 +57,40 @@ router.get('/capture/:id/', authCheck, function (req, res, next) {
                 message: '該当するカバーはありませんでした。'
             })
         }
-        // Pageresで取得する
-        var endpoint = configs.get('host') + '/covers/preview/' + cover._id + '/?ss=true';
+        coverFile.generate(cover._id, ['1200x1920'], function (err) {
+            console.log(err);
+            res.json({
+                message: 'エラー: ' + err
+            });
+        }, function (coverPath, coverUrl) {
 
-        var pageres = new Pageres({
-            delay : 5,
-            format: 'jpg',
-            filename: cover._id
-        })
-            .src(endpoint, ['1200x1920'], {})
-            .dest(appRoot + '/public/out');
-        // 取得
-        pageres.run(function (err) {
-            if (err) {
-                res.json({
-                    message: '取得できませんでした',
-                });
-            } else {
-                res.json({
-                    url: '/covers/' + req.params.id
-                });
-            }
+            res.json({
+                url: '/covers/' + req.params.id
+            });
         });
     });
 });
 
 router.get('/:id/', authCheck, function (req, res, next) {
-    var file = './public/out/' + req.params.id + '.jpg',
-        fileStream;
-    fs.access(file, fs.R_OK, function (err) {
-        if (err) {
-            res.status(404).render('error', {
-                title  : 'Not found',
-                message: '該当するカバーはありませんでした。'
-            });
-        } else {
-            res.download(file, 'cover_' + req.params.id + '.jpg', function(err){
-                if( err && !res.headersSent ){
-                    res.status(500).render('error', {
-                        title  : 'Not found',
-                        message: '画像のダウンロードに失敗しました。'
-                    });
-                }
-            });
-        }
+    coverFile.exists(req.params.id, function (err) {
+        res.status(404).render('error', {
+            title  : 'Not found',
+            message: '該当するカバーはありませんでした。'
+        });
+    }, function (coverPath, coverUrl) {
+        res.download(coverPath, 'cover_' + req.params.id + '.jpg', function (err) {
+            if (err && !res.headersSent) {
+                res.status(500).render('error', {
+                    title  : 'Not found',
+                    message: '画像のダウンロードに失敗しました。'
+                });
+            }
+        });
+
     });
 });
+
+
 
 router.delete('/:id/', authCheck, function (req, res, next) {
     Cover.findOne({
@@ -149,6 +135,61 @@ router.get('/preview/:id/', function (req, res, next) {
                 type    : cover.type,
                 port    : port,
                 preview : preview
+            });
+        }
+    });
+});
+
+
+
+router.post('/generate/:id/', authCheck, function (req, res, next) {
+
+    Cover.findOne({
+        _id: req.params.id
+    }, function (err, cover) {
+        if (err || cover.user != req.session.passport.user.id) {
+            res.status(500).json({
+                title  : 'Not found',
+                message: '該当するカバーはありませんでした。'
+            })
+        }
+        coverFile.generate(cover._id, ['1200x1920'], function (err) {
+            res.json({
+                message: 'エラー: ' + err
+            });
+        }, function (coverPath, coverUrl) {
+            res.json({
+                url: coverUrl
+            });
+        });
+    });
+
+});
+
+
+// Show post list
+router.get('/assign/:id/', authCheck, function (req, res, next) {
+    Cover.findOne({
+        _id: req.params.id
+    }, function (err, doc) {
+        if (err || doc.user != req.session.passport.user.id) {
+            res.render('error', {
+                title  : 'Not Found',
+                message: '該当するカバーはありませんでした'
+            });
+        } else {
+            var params = {
+                title: 'カバーを設定',
+                id   : req.params.id,
+                user : req.session.passport.user,
+                cover: doc,
+                src: false
+            };
+            coverFile.exists(req.params.id, function(){
+               res.render('assign', params);
+            }, function(coverPath, coverUrl){
+                params.src = coverUrl;
+                res.render('assign', params);
             });
         }
     });

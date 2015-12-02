@@ -2,6 +2,7 @@
 // Dialog
 angular.module('hamTop')
     .controller('CoverList', ['$scope', 'LxDialogService', 'LxNotificationService', '$http', function($scope, LxDialogService, LxNotificationService, $http){
+
         $scope.openDialog = function(id){
             LxDialogService.open(id);
         };
@@ -94,6 +95,6 @@ angular.module('hamTop')
                     }
                 }
             );
-        }
+        };
 
     }]);

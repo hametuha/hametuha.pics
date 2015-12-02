@@ -1,12 +1,13 @@
 var oauth    = require('oauth'),
     passport = require('passport');
 
+/* global credentials:true */
+
 /**
  * Get client
  * @returns {oauth.OAuth}
  */
 function getClient() {
-    console.log('リクエスト！', credentials);
     return new oauth.OAuth(
         credentials.requestTokenURL,
         credentials.accessTokenURL,
@@ -19,41 +20,35 @@ function getClient() {
 };
 
 /**
- * Validate session
- */
-function validateSession() {
-    if (!passport.session || !passport.session.token || !passport.session.tokenSecret) {
-        throw new Error('something bad happened');
-    }
-};
-
-/**
  * Get oauth request
  *
- * @param url
- * @param callback
+ * @param {String} url
+ * @param {String} token
+ * @param {String} tokenSecret
+ * @param {Function} callback
  * @returns {*}
  */
-module.exports.get = function (url, callback) {
+module.exports.get = function (url, token, tokenSecret, callback) {
     var client = getClient();
-    validateSession();
-    url = credentials.wpRoot + '/wp-json/wp/v2' + url;
-    console.log(url);
-    return client.get(url, passport.session.token, passport.session.tokenSecret, callback);
+    url = credentials.wpRoot + '/wp-json' + url;
+    return client.get(url, token, tokenSecret, callback);
 };
 
 /**
  * Post oauth request
  *
- * @param url
- * @param callback
+ * @param {String} url
+ * @param {String} token
+ * @param {String} tokenSecret
+ * @param {String} post_body
+ * @param {String} post_content_type
+ * @param {Function} callback
  * @returns {*}
  */
-module.exports.post = function (url, callback, post_body, post_content_type) {
+module.exports.post = function (url, token, tokenSecret, post_body, post_content_type, callback) {
     var client = getClient();
-    validateSession();
-    url = credentials.wpRoot + '/wp-json/wp/v2' + url;
-    return client.post(url, passport.session.token, passport.session.tokenSecret, post_body, post_content_type, callback);
+    url = credentials.wpRoot + '/wp-json' + url;
+    return client.post(url, token, tokenSecret, post_body, post_content_type, callback);
 };
 
 

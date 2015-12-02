@@ -63,7 +63,11 @@ block content
                   li
                     a.dropdown-link(ng-click='getScreenShot($index)')
                       i.mr.mdi.mdi-camera
-                      | 取得
+                      | ダウンロード
+                  li
+                    a.dropdown-link(href='/covers/assign/{{cover._id}}/')
+                      i.mr.mdi.mdi-link
+                      | 設定する
                   li
                     a.dropdown-link(ng-click="confirm($index)")
                       i.mr.mdi.mdi-close

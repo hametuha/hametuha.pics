@@ -308,6 +308,19 @@ header {
   }
 }
 
+.assign{
+  &__wrap{
+    padding-bottom: 80px;
+  }
+  &__image{
+    display: block;
+    margin: 0 auto;
+    max-width: 200px;
+    width: auto;
+    height: auto;
+  }
+}
+
 footer {
   position: fixed;
   bottom: 0;

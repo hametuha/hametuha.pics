@@ -151,3 +151,15 @@ end
 # --------------------------
 #
 
+# Add host name
+execute 'change_host' do
+  command "echo '10.0.2.2\thametuha.info'>> /etc/hosts"
+  user 'root'
+end
+# Add own host for pageres
+execute 'own_host' do
+  command "echo '#{node[:ip]}\t#{node[:host_name]}'>> /etc/hosts"
+  user 'root'
+end
+
+

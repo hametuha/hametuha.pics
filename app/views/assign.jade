@@ -1,0 +1,31 @@
+extends layout
+
+block content
+    #main.container(ng-cloak)
+        section.assign__wrap(ng-controller='PostList')
+            .user-info.clearfix.p
+                p.p
+                    img.user-info__pic.mr.float-left(src="#{user.avatar_urls['96']}")
+                    span.user-info__name こんにちは、#{user.name}さん！
+
+            .assign__title.clearfix.p
+                p.float-right
+                    a.btn.btn--m.btn--blue.btn--flat(lx-ripple, href='/covers/') 戻る
+                h2 “#{cover.title}”をカバーとして設定
+
+            .text-center.p.mb
+                if src
+                    img.assign__image(src='#{src}', alt='#{cover.title}')
+                else
+                    img.assign__image(ng-src='{{src}}', alt='#{cover.title}', ng-init='getCover("#{id}")')
+            .card
+                ul.list(ng-init="initPosts()")
+                    li.list-row.list-row--has-separator(ng-repeat='post in posts')
+                        .list-row__primary
+                            img(ng-src="{{post.cover}}")
+                        .list-row__content
+                            p.pl.pr
+                                strong {{post.title}}
+                        .list-row__secondary
+                            button.btn.btn--m.btn--blue.btn--fab(lx-ripple, ng-click='assign("#{id}", post.id)')
+                                i.mdi.mdi-check
