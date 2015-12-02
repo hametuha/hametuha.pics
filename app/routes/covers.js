@@ -1,9 +1,10 @@
-var express   = require('express'),
-    router    = express.Router(),
-    Cover     = require('../models/cover'),
-    authCheck = require('../lib/auth-check'),
-    coverFile = require('../lib/coverFile'),
-    configs   = require('config');
+var express      = require('express'),
+    router       = express.Router(),
+    Cover        = require('../models/cover'),
+    authCheck    = require('../lib/auth-check'),
+    coverFile    = require('../lib/coverFile'),
+    oauthRequest = require('../lib/oauthRequest'),
+    configs      = require('config');
 
 // GET list page
 router.get('/', authCheck, function (req, res, next) {
@@ -47,6 +48,17 @@ router.get('/list/', authCheck, function (req, res, next) {
     });
 });
 
+// Get posts list
+router.get('/posts/', authCheck, function (req, res, next) {
+    var url = '/hametuha/v1/covers/me/',
+        posts = [];
+    oauthRequest.get(url, req.session.passport.user.token, req.session.passport.user.tokenSecret, function(err, data, response){
+        res.json(data);
+    });
+
+
+});
+
 router.get('/capture/:id/', authCheck, function (req, res, next) {
     Cover.findOne({
         _id: req.params.id
@@ -58,12 +70,10 @@ router.get('/capture/:id/', authCheck, function (req, res, next) {
             })
         }
         coverFile.generate(cover._id, ['1200x1920'], function (err) {
-            console.log(err);
             res.json({
                 message: 'エラー: ' + err
             });
         }, function (coverPath, coverUrl) {
-
             res.json({
                 url: '/covers/' + req.params.id
             });
@@ -89,7 +99,6 @@ router.get('/:id/', authCheck, function (req, res, next) {
 
     });
 });
-
 
 
 router.delete('/:id/', authCheck, function (req, res, next) {
@@ -140,8 +149,7 @@ router.get('/preview/:id/', function (req, res, next) {
     });
 });
 
-
-
+// Generate image
 router.post('/generate/:id/', authCheck, function (req, res, next) {
 
     Cover.findOne({
@@ -183,16 +191,17 @@ router.get('/assign/:id/', authCheck, function (req, res, next) {
                 id   : req.params.id,
                 user : req.session.passport.user,
                 cover: doc,
-                src: false
+                src  : false
             };
-            coverFile.exists(req.params.id, function(){
-               res.render('assign', params);
-            }, function(coverPath, coverUrl){
+            coverFile.exists(req.params.id, function () {
+                res.render('assign', params);
+            }, function (coverPath, coverUrl) {
                 params.src = coverUrl;
                 res.render('assign', params);
             });
         }
     });
 });
+
 
 module.exports = router;

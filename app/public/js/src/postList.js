@@ -1,21 +1,33 @@
 angular.module('hamTop')
     .controller('PostList', ['$scope', 'LxDialogService', 'LxNotificationService', '$http', function($scope, LxDialogService, LxNotificationService, $http){
 
+        function redirect(msg){
+            LxNotificationService.error(msg);
+                    setTimeout(function(){
+                        document.location.href = '/covers/';
+                    }, 3000);
+
+        }
+
         // Posts list.
-        $scope.posts = [
-            {
-                id: 1,
-                title: '投稿タイトル',
-                cover: 'http://s.hametuha.com/wp-content/uploads/2015/08/uta-and-on2-300x480.jpg'
-            }
-        ];
+        $scope.posts = [];
 
         // SRC of cover image.
         $scope.src = false;
 
         // Get post list
         $scope.initPosts = function(){
-            console.log('ユーザーの投稿を取得');
+            LxNotificationService.info('作品集のリストを取得しています……');
+            $http.get('/covers/posts/').then(
+                function(result){
+                    var data = JSON.parse(result.data);
+                    $scope.posts = data;
+                },
+                function(result){
+                    console.log('エラー', result);
+                    //redirect('作品集を取得できませんでした。一覧に戻ります。');
+                }
+            );
         };
 
         // Generate Cover
@@ -27,10 +39,7 @@ angular.module('hamTop')
                     LxNotificationService.success('表紙画像を生成しました。');
                 },
                 function(result){
-                   LxNotificationService.error('画像の生成に失敗しました。一覧に戻ります。');
-                    setTimeout(function(){
-                        document.location.href = '/covers/';
-                    }, 3000);
+                    redirect('画像の生成に失敗しました。一覧に戻ります。');
                 }
             );
         };

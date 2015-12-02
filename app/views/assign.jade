@@ -22,10 +22,11 @@ block content
                 ul.list(ng-init="initPosts()")
                     li.list-row.list-row--has-separator(ng-repeat='post in posts')
                         .list-row__primary
-                            img(ng-src="{{post.cover}}")
+                            img(ng-src="{{post.thumbnails.medium}}")
                         .list-row__content
                             p.pl.pr
                                 strong {{post.title}}
+                                small.fs-body-1.ml {{post.status|verbose}}
                         .list-row__secondary
                             button.btn.btn--m.btn--blue.btn--fab(lx-ripple, ng-click='assign("#{id}", post.id)')
                                 i.mdi.mdi-check
