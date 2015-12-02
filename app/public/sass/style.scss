@@ -81,16 +81,6 @@ header {
     }
   }
   // Background image
-  &--top {
-    background: url("../images/face.jpg") top center no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
-  }
-  &--account {
-    background: transparent url("../images/mars.jpeg") top center no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
-  }
   &__title {
     margin-bottom: 40px;
     font-size: 40px;

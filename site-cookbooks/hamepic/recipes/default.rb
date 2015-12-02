@@ -103,7 +103,7 @@ template "/etc/nginx/sites-enabled/nginx.vagrant.conf" do
   owner 'root'
   group 'root'
   action :create
-  notifies :restart, "service[nginx]"
+  notifies :reload, "service[nginx]"
 end
 
 
@@ -151,3 +151,18 @@ end
 # --------------------------
 #
 
+# Install Config file
+template "/var/www/app/config/default.json" do
+  source "default.json.erb"
+  mode '0644'
+
+  owner 'vagrant'
+  group 'vagrant'
+  action :create
+end
+
+# Add host name
+execute 'change_host' do
+  command "echo '10.0.2.2\t#{node[:wp_host]}' >> /etc/hosts"
+  user 'root'
+end

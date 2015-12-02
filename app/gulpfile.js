@@ -46,7 +46,7 @@ gulp.task('jshint', function() {
 gulp.task('copyLib', function(){
     gulp.src(['./bower_components/mdi/fonts/**/*'])
         .pipe(gulp.dest('./public/fonts/'));
-    return gulp.src([
+    gulp.src([
         'bower_components/jquery/dist/jquery.js',
         'bower_components/velocity/velocity.js',
         'bower_components/moment/min/moment-with-locales.js',

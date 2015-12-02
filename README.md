@@ -50,6 +50,8 @@ vagrant plugin install vagrant-berkshelf
 #### セットアップ
 
 ```bash
+# 依存しているCookbookをインストール
+berks vendor ./cookbooks
 # アップ
 vagrant up
 # アクセス

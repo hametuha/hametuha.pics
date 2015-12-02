@@ -1,12 +1,12 @@
 var oauth    = require('oauth'),
-    passport = require('passport');
+    passport = require('passport'),
+    session  = require('express-session');
 
 /**
  * Get client
  * @returns {oauth.OAuth}
  */
 function getClient() {
-    console.log('リクエスト！', credentials);
     return new oauth.OAuth(
         credentials.requestTokenURL,
         credentials.accessTokenURL,
@@ -31,29 +31,32 @@ function validateSession() {
  * Get oauth request
  *
  * @param url
+ * @param token
+ * @param tokenSecret
  * @param callback
  * @returns {*}
  */
-module.exports.get = function (url, callback) {
+module.exports.get = function (url, token, tokenSecret, callback) {
     var client = getClient();
-    validateSession();
     url = credentials.wpRoot + '/wp-json/wp/v2' + url;
-    console.log(url);
-    return client.get(url, passport.session.token, passport.session.tokenSecret, callback);
+    return client.get(url, token, tokenSecret, callback);
 };
 
 /**
  * Post oauth request
  *
  * @param url
+ * @param token
+ * @param tokenSecret
+ * @param post_body
+ * @param post_content_type
  * @param callback
  * @returns {*}
  */
-module.exports.post = function (url, callback, post_body, post_content_type) {
+module.exports.post = function (url, token, tokenSecret, post_body, post_content_type, callback) {
     var client = getClient();
-    validateSession();
     url = credentials.wpRoot + '/wp-json/wp/v2' + url;
-    return client.post(url, passport.session.token, passport.session.tokenSecret, post_body, post_content_type, callback);
+    return client.post(url, token, tokenSecret, post_body, post_content_type, callback);
 };
 
 

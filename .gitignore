@@ -9,6 +9,5 @@ app/public/css/*
 app/public/js/dist/*
 app/public/images/face.jpg
 app/public/images/ha_logo_revised.png
-app/config/*
-!app/config/default.json
+app/config/*.json
 cookbooks/

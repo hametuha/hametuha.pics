@@ -3,13 +3,23 @@
 
 require 'yaml'
 
+# 以下を編集。
 HAMETUHA_CONFIG = {
-  :ip => '192.168.33.24', #IP アドレス
-  :box => 'opscode-centos-7.0', # ボックスファイル。事前にインストールしておくこと
-  :host_name => 'local.hametuha.pics', # サイトのホスト名
-  :vagrant_dir => '/var/www/app', # Vagrantのルートディレクトリ。変更の必要なし
+  :host_name       => 'local.hametuha.pics', # クライアントサイトのホスト名
+  :wp_host         => 'takahashifumiki.info', # ホストとなるWordPressのドメイン。
+  :wp_url          => 'https://takahashifumiki.info', # ホストとなるWordPressのURL
+  :consumer_key    => 'ikjTnbUBsTsC', # 作成したコンシューマーキー
+  :consumer_secret => 'dihm2jxs0WVr70OFS6jZzTgEBtgWoevcvE50ao7zHNVk6Bx0', # 作成したコンシューマーシークレット
 }
+# 編集ここまで
 
+
+# ボックスファイル。事前にインストールしておくこと
+HAMETUHA_CONFIG[:box] = 'opscode-centos-7.0';
+# Vagrantのルートディレクトリ。変更の必要なし
+HAMETUHA_CONFIG[:vagrant_dir] = '/var/www/app';
+# ゲストOSのIPアドレス。 変更の必要なし
+HAMETUHA_CONFIG[:ip] = '192.168.33.24';
 
 #
 # ほかに変更したい要素がある場合は、以下のブロックに書き込んでください。
@@ -60,6 +70,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.json = {
       :ip => HAMETUHA_CONFIG[:ip],
       :host_name => HAMETUHA_CONFIG[:host_name],
+      :wp_host  => HAMETUHA_CONFIG[:wp_host],
+      :wp_url   => HAMETUHA_CONFIG[:wp_url],
+      :consumer_key => HAMETUHA_CONFIG[:consumer_key],
+      :consumer_secret => HAMETUHA_CONFIG[:consumer_secret],
       :base_dir => HAMETUHA_CONFIG[:vagrant_dir],
       :doc_dir  => File.join(HAMETUHA_CONFIG[:vagrant_dir], 'public'),
       :log_dir  => "/home/vagrant/log",
