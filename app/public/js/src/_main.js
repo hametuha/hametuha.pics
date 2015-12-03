@@ -26,4 +26,8 @@ angular.module('hamTop', [
                 break;
         }
     };
-});
+}).filter('nl2br', ['$sce', function($sce){
+    return function(text){
+        return $sce.trustAsHtml( text.replace(/\r/g, '<br />') );
+    };
+}]);

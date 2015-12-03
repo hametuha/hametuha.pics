@@ -1,10 +1,12 @@
 var express      = require('express'),
-    router       = express.Router(),
+    router       = express.Router()
     Cover        = require('../models/cover'),
     authCheck    = require('../lib/auth-check'),
     coverFile    = require('../lib/coverFile'),
     oauthRequest = require('../lib/oauthRequest'),
-    configs      = require('config');
+    configs      = require('config'),
+    escape       = require('escape-html'),
+    nl2br        = require('nl2br');
 
 // GET list page
 router.get('/', authCheck, function (req, res, next) {
@@ -136,8 +138,8 @@ router.get('/preview/:id/', function (req, res, next) {
             });
         } else {
             res.render('cover/' + cover.type, {
-                title   : cover.title,
-                subTitle: cover.subTitle,
+                title   : nl2br(escape(cover.title)),
+                subTitle: nl2br(escape(cover.subTitle)),
                 author  : cover.author,
                 type    : cover.type,
                 port    : port,
