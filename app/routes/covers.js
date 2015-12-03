@@ -55,8 +55,6 @@ router.get('/posts/', authCheck, function (req, res, next) {
     oauthRequest.get(url, req.session.passport.user.token, req.session.passport.user.tokenSecret, function(err, data, response){
         res.json(data);
     });
-
-
 });
 
 router.get('/capture/:id/', authCheck, function (req, res, next) {
@@ -203,5 +201,39 @@ router.get('/assign/:id/', authCheck, function (req, res, next) {
     });
 });
 
+
+// Assign image
+router.post('/assign/:id/to/:post/', authCheck, function(req, res, next){
+    var user = req.session.passport.user;
+    Cover.findOne({
+        _id: req.params.id
+    }, function(err, doc){
+        if( err || doc.user != user.id ){
+            res.status(403).json({
+                title: 'Permission Denied',
+                message: '該当するカバーはありませんでした'
+            });
+        } else {
+            coverFile.exists(doc._id, function(err){
+                res.status(404).json({
+                    title: 'Not Found',
+                    message: 'まだカバー画像が生成されていません。'
+                });
+            }, function(path, url){
+                oauthRequest.post('/hametuha/v1/cover/' + req.params.post + '/', user.token, user.tokenSecret, {
+                    url: url,
+                    title: doc.title
+                }, '', function(err, data){
+                    console.log('Error: ', err, 'Data:', data);
+                    if( err ){
+                        res.status(500).json(data);
+                    }else{
+                        res.json(data);
+                    }
+                });
+            });
+        }
+    });
+});
 
 module.exports = router;

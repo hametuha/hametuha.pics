@@ -55,8 +55,22 @@ angular.module('hamTop')
                 },
                 function(answer){
                     if( answer ){
-                        LxNotificationService.success(id + 'を' + postID + 'にアサインしました');
-                        $scope.initPosts();
+                        $http.post('/covers/assign/' + id + '/to/' + postID + '/').then(
+                            function(result){
+                                LxNotificationService.success('表紙画像を設定しました。');
+                                var post = JSON.parse(result.data);
+                                for( var i = 0, l = $scope.posts.length; i < l; i++ ){
+                                    if( $scope.posts[i].id == post.id ){
+                                        $scope.posts[i] = post;
+                                        break;
+                                    }
+                                }
+                            },
+                            function(result){
+                                console.log(result.data);
+                                LxNotificationService.error('表紙画像の設定に失敗しました。');
+                            }
+                        );
                     }
                 }
             );
