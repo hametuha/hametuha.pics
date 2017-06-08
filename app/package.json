@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon -L ./bin/www",
+    "start": "NODE_TLS_REJECT_UNAUTHORIZED=0; nodemon -L ./bin/www",
     "start:p": "NODE_ENV=production forever start bin/www",
     "stop:p": "forever stop bin/www",
     "restart:p": "forever restart bin/www"
