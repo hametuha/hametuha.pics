@@ -32,7 +32,7 @@ gulp.task('sass',function(){
 
 // JSHint and minify
 gulp.task('jshint', function() {
-    return gulp.src(['src/js/src/**/*.js'])
+    return gulp.src(['src/js/**/*.js'])
         .pipe($.jshint())
         .pipe($.jshint.reporter('jshint-stylish'))
         .pipe($.concat('app.js'))
