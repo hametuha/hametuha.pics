@@ -22,7 +22,7 @@
     $bg-color: #F6F0D9;
     $body-color: #000000;
     color: $body-color;
-    background: $bg-color url('../../public/images/paper.jpg') left top repeat;
+    background: $bg-color url('../images/paper.jpg') left top repeat;
     .cover{
       &__wrap{
         top: 50px;

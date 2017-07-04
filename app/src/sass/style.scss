@@ -82,12 +82,12 @@ header {
   }
   // Background image
   &--top {
-    background: url("../../public/images/face.jpg") top center no-repeat;
+    background: url("../images/face.jpg") top center no-repeat;
     background-size: cover;
     background-attachment: fixed;
   }
   &--account {
-    background: transparent url("../../public/images/mars.jpeg") top center no-repeat;
+    background: transparent url("../public/images/mars.jpeg") top center no-repeat;
     background-size: cover;
     background-attachment: fixed;
   }
