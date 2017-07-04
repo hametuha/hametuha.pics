@@ -1,5 +1,7 @@
 var gulp = require('gulp'),
-    $ = require('gulp-load-plugins')();
+    $ = require('gulp-load-plugins')(),
+    pngquant    = require('imagemin-pngquant'),
+    eventStream = require('event-stream');
 
 
 // Sassのタスク
@@ -33,50 +35,52 @@ gulp.task('jshint', function() {
     return gulp.src(['public/js/src/**/*.js'])
         .pipe($.jshint())
         .pipe($.jshint.reporter('jshint-stylish'))
-        .pipe($.sourcemaps.init({
-            loadMaps: true
-        }))
         .pipe($.concat('app.js'))
         .pipe($.uglify())
-        .pipe($.sourcemaps.write('./'))
-        .pipe(gulp.dest('public/js/dist'));
+        .pipe(gulp.dest('public/js'));
+});
+
+
+// Image min
+gulp.task('imagemin', function () {
+  return gulp.src('./src/images/**/*')
+    .pipe($.imagemin({
+      progressive: true,
+      svgoPlugins: [{removeViewBox: false}],
+      use        : [pngquant()]
+    }))
+    .pipe(gulp.dest('./public/images'));
 });
 
 // Copy material design con
-gulp.task('copyLib', function(){
+gulp.task('copyLib', function () {
+  return eventStream.merge(
     gulp.src(['./bower_components/mdi/fonts/**/*'])
-        .pipe(gulp.dest('./public/fonts/'));
-    return gulp.src([
-        'bower_components/jquery/dist/jquery.js',
-        'bower_components/velocity/velocity.js',
-        'bower_components/moment/min/moment-with-locales.js',
-        'bower_components/angular/angular.js',
-        'bower_components/lumx/dist/lumx.js'
+      .pipe(gulp.dest('./public/fonts/')),
+    gulp.src([
+      'bower_components/jquery/dist/jquery.js',
+      'bower_components/velocity/velocity.js',
+      'bower_components/moment/min/moment-with-locales.js',
+      'bower_components/angular/angular.js',
+      'bower_components/lumx/dist/lumx.js'
     ])
-        .pipe($.sourcemaps.init({
-            loadMaps: true
-        }))
-        .pipe($.concat('lib.js'))
-        //.pipe($.uglify())
-        .pipe($.sourcemaps.write('./'))
-        .pipe(gulp.dest('./public/js/dist'));
+      .pipe($.sourcemaps.init({
+        loadMaps: true
+      }))
+      .pipe($.concat('lib.js'))
+      //.pipe($.uglify())
+      .pipe($.sourcemaps.write('./'))
+      .pipe(gulp.dest('./public/js'))
+  );
 });
 
 // watch
 gulp.task('watch',function(){
-    gulp.watch('public/sass/**/*.scss',function(event){
-        gulp.run('sass');
-    });
-    gulp.watch('public/js/src/**/*.js',function(event){
-        gulp.run('jshint');
-    });
+    gulp.watch('public/sass/**/*.scss',['sass']);
+    gulp.watch('public/js/src/**/*.js', ['jshint']);
+  gulp.watch('public/images/src/**/*', ['imagemin']);
 });
 
 // Default Tasks
-gulp.task('default', function() {
-    gulp.run('watch');
-});
-
-gulp.task('build', function(){
-    gulp.run(['copyLib', 'sass', 'jshint'])
-});
+gulp.task('default', [ 'build', 'watch' ]);
+gulp.task('build', ['copyLib', 'sass', 'jshint', 'imagemin']);

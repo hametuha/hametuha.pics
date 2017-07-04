@@ -1,6 +1,6 @@
 {
-  "host": "http://hametuha.top",
-  "domain": "https://hametuha.com",
+  "host": "http://localhost:3000",
+  "domain": "https://hametuha.info",
   "id": "10",
   "consumerKey": "some-app-key",
   "consumerSecret": "here-comes-secret",

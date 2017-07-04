@@ -75,12 +75,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         :sendfile => "off",
       },
       :nodejs => {
-        :version => '0.12.7',
+        :version => '6.11.0',
         :install_method => 'binary',
         :binary => {
           :checksum => {
-            :linux_x86 => 'bccf75736b64bd175b45681ed83a020f0dcc59b3626bbcefd5f7438aed9e9c15',
-            :linux_x64 => '6a2b3077f293d17e2a1e6dba0297f761c9e981c255a2c82f329d4173acf9b9d5',
+            :linux_x86 => '790cae8d5055aa174f2121d2ebb31bc08620d82fb5b7b9707df0859d2b24d869',
+            :linux_x64 => '2b0e1b06bf8658ce02c16239eb6a74b55ad92d4fb7888608af1d52b383642c3c',
           }
         }
       }
@@ -91,7 +91,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       recipe[selinux::disabled]
       recipe[iptables::disabled]
       recipe[yum-ius]
-      recipe[mongodb3::default]
+      recipe[sc-mongodb::default]
       recipe[nginx]
       recipe[nodejs]
     ]

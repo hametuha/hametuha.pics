@@ -1,5 +1,5 @@
 var express      = require('express'),
-    router       = express.Router()
+    router       = express.Router(),
     Cover        = require('../models/cover'),
     authCheck    = require('../lib/auth-check'),
     coverFile    = require('../lib/coverFile'),

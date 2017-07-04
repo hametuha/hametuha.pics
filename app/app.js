@@ -6,8 +6,10 @@ var express       = require('express'),
     path          = require('path'),
     authCheck     = require('./lib/auth-check'),
     logger        = require('morgan'),
-    covers       = require('./routes/covers'),
+    covers        = require('./routes/covers'),
+    camera        = require('./routes/camera'),
     app           = express(),
+    favicon = require('serve-favicon'),
     gravatar      = require('gravatar'),
     jade          = require('jade'),
     bodyParser    = require('body-parser'),
@@ -28,6 +30,9 @@ app.set('view engine', 'jade');
 app.use(express.static(path.join(__dirname, 'public'), {
     lastModified: true
 }));
+
+// Set favicon
+app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
 
 // Body parser
 app.use(bodyParser.json());
@@ -171,8 +176,9 @@ app.get('/auth/logout', function(req, res, next){
     });
 });
 
-// Cover list
+// Register routers
 app.use('/covers', covers);
+app.use('/camera', camera);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -182,6 +188,8 @@ app.use(function (req, res, next) {
 });
 
 // error handlers
+console.log('EnV=', app.get('env'), configs.get('id'));
+
 
 // development error handler
 // will print stacktrace

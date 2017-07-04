@@ -17,8 +17,13 @@ proxy_set_header  X-Forwarded-For    $proxy_add_x_forwarded_for;
 # this server caches almost everything
 server{
 	listen <%= node[:ip] %>:80;
+	listen <%= node[:ip] %>:443 ssl;
 	server_name <%= node[:host_name] %>;
 	root <%= node[:doc_dir] %>;
+    ssl_certificate      /etc/pki/tls/private/localhost.crt_and_key;
+    ssl_certificate_key  /etc/pki/tls/private/localhost.key;
+    ssl_protocols        SSLv3 TLSv1;
+    ssl_ciphers          HIGH:!ADH:!MD5;
     # Log cache status
     add_header X-Cache "$upstream_cache_status";
     # include statics
