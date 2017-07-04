@@ -6,7 +6,7 @@ var gulp = require('gulp'),
 
 // Sassのタスク
 gulp.task('sass',function(){
-    return gulp.src(['public/sass/**/*.scss'])
+    return gulp.src(['src/sass/**/*.scss'])
         .pipe($.plumber())
         .pipe($.sourcemaps.init())
         .pipe($.sass({
@@ -15,7 +15,7 @@ gulp.task('sass',function(){
             omitSourceMapUrl: false,
             sourceMap: true,
             includePaths: [
-                './public/sass',
+                './src/sass',
                 './bower_components/bourbon/app/assets/stylesheets',
                 './bower_components/neat/app/assets/stylesheets',
                 './bower_components/mdi/scss',
@@ -32,7 +32,7 @@ gulp.task('sass',function(){
 
 // JSHint and minify
 gulp.task('jshint', function() {
-    return gulp.src(['public/js/src/**/*.js'])
+    return gulp.src(['src/js/src/**/*.js'])
         .pipe($.jshint())
         .pipe($.jshint.reporter('jshint-stylish'))
         .pipe($.concat('app.js'))
@@ -76,9 +76,9 @@ gulp.task('copyLib', function () {
 
 // watch
 gulp.task('watch',function(){
-    gulp.watch('public/sass/**/*.scss',['sass']);
-    gulp.watch('public/js/src/**/*.js', ['jshint']);
-  gulp.watch('public/images/src/**/*', ['imagemin']);
+    gulp.watch('src/sass/**/*.scss',['sass']);
+    gulp.watch('src/js/src/**/*.js', ['jshint']);
+  gulp.watch('src/images/src/**/*', ['imagemin']);
 });
 
 // Default Tasks
