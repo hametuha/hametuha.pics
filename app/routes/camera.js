@@ -23,6 +23,7 @@ router.post('/ss', function(req, res, next){
     postBack: req.body.post_back
   }, function(url, id){
     // O.K. Let's send post request.
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     request.post( req.body.post_back, {
       form:{
         success: true,
@@ -33,6 +34,7 @@ router.post('/ss', function(req, res, next){
       !err || console.log(err);
     });
   }, function(err,  id){
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     request.post(req.body.post_back, {
       form:{
         success:false,
@@ -44,7 +46,7 @@ router.post('/ss', function(req, res, next){
     });
   });
   if (result) {
-    res.json({
+    return res.json({
       success: true,
       id: result
     });

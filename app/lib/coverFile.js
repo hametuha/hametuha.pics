@@ -78,7 +78,7 @@ module.exports.capture = function (params, successCallback, errorCallback) {
   var delay = params.delay || 10;
   var puid = new Puid('JS');
   var filename = puid.generate();
-  var endpoint = configs.get('host') + '/screenshots/' + filename + '.jpg';
+  var endpoint = configs.get('host') + '/screenshots/' + filename + '.png';
   // Generate
   var pageres = new Pageres({
     delay   : delay,
