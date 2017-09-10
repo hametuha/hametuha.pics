@@ -75,7 +75,7 @@ module.exports.capture = function (params, successCallback, errorCallback) {
     return false;
   }
   var size = params.size || '1200x1920';
-  var delay = params.delay || 10;
+  var delay = params.delay || 20;
   var puid = new Puid('JS');
   var filename = puid.generate();
   var endpoint = configs.get('host') + '/screenshots/' + filename + '.png';
